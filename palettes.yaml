@@ -1,0 +1,24 @@
+- palette:
+    name: math
+    commands:
+      - command:
+          name: add
+          function: math.AddNumbers
+          help: return the result of adding n numbers
+          arguments: 2
+          default: null
+      - command:
+          name: mult
+          function: math.MultiplyNumbers
+          help: return the result of multiplying n numbers
+          arguments: 2
+          default: null
+- palette:
+    name: time
+    commands:
+      - command:
+          name: curr
+          function: time.GetCurrentTime
+          help: return current time by timezone (default=unix)
+          arguments: 1
+          default: unix
