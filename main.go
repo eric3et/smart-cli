@@ -17,20 +17,31 @@ func main() {
 
 	input := os.Args
 
+	//TODO: Add/Clean validations in func main()
 	palette, command, args := utils.NormalizeInput(input)
 	if palette == "" || command == "" {
 		fmt.Println("Invalid Request")
+		return
 	}
 
 	p := utils.GetPalette(palette)
 	if p.Name == "" {
+		fmt.Println("Invalid Request")
 		return
 	}
 
 	c := utils.GetCommand(p, command)
 	if c.Name == "" {
+		fmt.Println("Invalid Request")
 		return
 	}
+
+	if len(args) < c.Arguments {
+		fmt.Println("Invalid Request")
+		return
+	}
+
+	// if command is valid, then execute
 	executeCommand(c, args)
 
 }

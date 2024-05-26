@@ -30,6 +30,9 @@ func NormalizeInput(inputs []string) (palette string, command string, args []str
 		inputs[idx] = strings.ToLower(val)
 	}
 
+	if len(inputs) < 3 {
+		return
+	}
 	// seperate inputs
 	palette = inputs[1]
 	command = inputs[2]
