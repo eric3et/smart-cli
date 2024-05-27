@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/eric3et/smart-cli/functions/common"
 	"github.com/eric3et/smart-cli/functions/math"
 	"github.com/eric3et/smart-cli/functions/time"
 	"github.com/eric3et/smart-cli/types"
@@ -12,48 +12,43 @@ import (
 
 func main() {
 
-	//DEBUG
+	// debug
 	// input := []string{"buffer", "math", "add", "1", "2"}
 
+	// get input arguments
 	input := os.Args
 
-	//TODO: Add/Clean validations in func main()
-	palette, command, args := utils.NormalizeInput(input)
-	if palette == "" || command == "" {
-		fmt.Println("Invalid Request")
-		return
-	}
+	//normalize and categorize input params
+	palette, command, args, err := utils.NormalizeInput(input)
+	utils.Check(err)
 
-	p := utils.GetPalette(palette)
-	if p.Name == "" {
-		fmt.Println("Invalid Request")
-		return
-	}
+	// get palette definition from input param
+	p, err := utils.GetPalette(palette)
+	utils.Check(err)
 
-	c := utils.GetCommand(p, command)
-	if c.Name == "" {
-		fmt.Println("Invalid Request")
-		return
-	}
+	// get command definition from input param if it exists under chosen palette
+	c, err := utils.GetCommand(p, command)
+	utils.Check(err)
 
-	if len(args) < c.Arguments {
-		fmt.Println("Invalid Request")
-		return
-	}
+	// validate arguments provided against command definition
+	err = utils.ValidateCommand(c, args)
+	utils.Check(err)
 
 	// if command is valid, then execute
-	executeCommand(c, args)
+	executeCommand(p, c, args)
 
 }
 
-func executeCommand(c types.Command, args []string) {
+func executeCommand(p *types.Palette, c *types.Command, args []string) {
 	switch c.Function {
+	case "common.ListCommands":
+		common.ListCommands(*p, *c, args)
 	case "math.AddNumbers":
-		math.AddNumbers(c, args)
+		math.AddNumbers(*p, *c, args)
 	case "math.MultiplyNumbers":
-		math.MultiplyNumbers(c, args)
+		math.MultiplyNumbers(*p, *c, args)
 	case "time.GetCurrentTime":
-		time.GetCurrentTime(c, args)
+		time.GetCurrentTime(*p, *c, args)
 
 	}
 }

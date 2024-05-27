@@ -8,7 +8,7 @@ import (
 	"github.com/eric3et/smart-cli/utils"
 )
 
-func MultiplyNumbers(c types.Command, args []string) {
+func MultiplyNumbers(p types.Palette, c types.Command, args []string) {
 	out := ""
 	result := 1
 

@@ -8,7 +8,7 @@ import (
 	"github.com/eric3et/smart-cli/utils"
 )
 
-func AddNumbers(c types.Command, args []string) {
+func AddNumbers(p types.Palette, c types.Command, args []string) {
 	out := ""
 	result := 0
 	if len(args) != c.Arguments {

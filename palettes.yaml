@@ -2,6 +2,12 @@
     name: math
     commands:
       - command:
+          name: ls
+          function: common.ListCommands
+          help: return list of all math commands
+          arguments: 0
+          default: null
+      - command:
           name: add
           function: math.AddNumbers
           help: return the result of adding n numbers
@@ -16,6 +22,12 @@
 - palette:
     name: time
     commands:
+      - command:
+          name: ls
+          function: common.ListCommands
+          help: return list of all palettes commands
+          arguments: 0
+          default: null
       - command:
           name: curr
           function: time.GetCurrentTime

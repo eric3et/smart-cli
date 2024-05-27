@@ -12,11 +12,11 @@ import (
 
 func Check(err error) {
 	if err != nil {
-		panic(err.Error())
+		fmt.Printf("%s\n", err.Error())
 	}
 }
 
-func NormalizeInput(inputs []string) (palette string, command string, args []string) {
+func NormalizeInput(inputs []string) (palette string, command string, args []string, err error) {
 
 	//allow execution when built or not
 	if inputs[0] == "smart" {
@@ -31,14 +31,14 @@ func NormalizeInput(inputs []string) (palette string, command string, args []str
 	}
 
 	if len(inputs) < 3 {
-		return
+		return "", "", nil, fmt.Errorf("not enought arguments")
 	}
 	// seperate inputs
 	palette = inputs[1]
 	command = inputs[2]
 	args = inputs[3:]
 
-	return palette, command, args
+	return palette, command, args, nil
 }
 
 func LoadPalettes() (palettes types.Palettes) {
@@ -53,30 +53,35 @@ func LoadPalettes() (palettes types.Palettes) {
 	return palettes
 }
 
-func GetPalette(palette string) types.Palette {
+func GetPalette(palette string) (*types.Palette, error) {
 
 	palettes := LoadPalettes()
 
 	// get palette from palettes
 	for _, p := range palettes {
 		if p.Palette.Name == palette {
-			return p.Palette
+			return &p.Palette, nil
 		}
 	}
 
-	fmt.Printf("%s Palette doesn't exist\n", palette)
-	return types.Palette{}
+	return nil, fmt.Errorf("%s Palette doesn't exist", palette)
 }
 
-func GetCommand(palette types.Palette, command string) types.Command {
+func GetCommand(palette *types.Palette, command string) (*types.Command, error) {
 
 	// get palette from palettes
 	for _, c := range palette.Commands {
 		if c.Command.Name == command {
-			return c.Command
+			return &c.Command, nil
 		}
 	}
 
-	fmt.Printf("%s Command doesn't exist in %s Palette\n", command, palette.Name)
-	return types.Command{}
+	return nil, fmt.Errorf("%s Command doesn't exist in %s Palette", command, palette.Name)
+}
+
+func ValidateCommand(c *types.Command, args []string) error {
+	if len(args) < c.Arguments {
+		return fmt.Errorf("not enough arguments")
+	}
+	return nil
 }
